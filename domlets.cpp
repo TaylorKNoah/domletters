@@ -73,9 +73,9 @@ int main(int argv, char* argc[]){
     {
         to_lowercase(valid_words[i]->word);
         find_dominant_letter_and_count(valid_words[i]);
-        cout<<"\n\n";
-        print_valid_word(valid_words[i]);
         dom_count += valid_words[i]->count;
+        //cout<<"\n\n";
+        //print_valid_word(valid_words[i]);
     }
 
     cout<<"\nDominant letters count: "<<dom_count<<endl;
@@ -112,8 +112,6 @@ void parse_file_to_words(){
     //read in first line
     //set len to length of line
     char line[MAX];
-    read_in.getline(line, MAX, '\n');
-    int len = strlen(line);
 
     // i is for pretty output
     int a=0;
@@ -121,7 +119,9 @@ void parse_file_to_words(){
     //continue reading new lines if 
     // eof bit not flipped
     while(!read_in.eof()){
-        cout<<'\n'<<a<<") "<<line;
+        //cout<<'\n'<<a<<") "<<line;
+        read_in.getline(line, MAX, '\n');
+        int len = strlen(line);
 
         //find valid words using indexes 'i' and 'j'
         for(int i=0; i<len; ++i)
@@ -168,8 +168,6 @@ void parse_file_to_words(){
         }
         
         //read a new line and set the new length of it
-        read_in.getline(line, MAX, '\n');
-        len = strlen(line);
         ++a;
     }
 }
