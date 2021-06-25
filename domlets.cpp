@@ -19,6 +19,7 @@ using namespace std;
 void parse_file_to_words();
 void find_dominant_letter_and_count(struct domword* valid_word);
 void print_valid_word(struct domword* valid_word);
+void to_lowercase(char*);
 bool is_valid(char);
 void collect_garbage();
 
@@ -67,12 +68,17 @@ int main(int argv, char* argc[]){
     parse_file_to_words();
 
     //for each valid word find the dominant letter and its count
+    int dom_count = 0;
     for(int i=0; i<vwi; ++i)
     {
+        to_lowercase(valid_words[i]->word);
         find_dominant_letter_and_count(valid_words[i]);
         cout<<"\n\n";
         print_valid_word(valid_words[i]);
+        dom_count += valid_words[i]->count;
     }
+
+    cout<<"\nDominant letters count: "<<dom_count<<endl;
 
 
     /*
@@ -121,7 +127,7 @@ void parse_file_to_words(){
         for(int i=0; i<len; ++i)
         {
             // valid words are at the begining of the line or start with a space
-            if(i == 0 || line[i] == ' ')
+            if((i == 0 && is_valid(line[i])) || line[i] == ' ')
             {
                 int j=i+1;
                 //to mark current word as valid or not
@@ -171,19 +177,23 @@ void parse_file_to_words(){
 
 
 // Finds the dominant letter in a word and the count of that letter
+// Will take the largest count that is earliest in the alphabet
 void find_dominant_letter_and_count(domword* valid_word)
 {
     if(!valid_word) return;
 
     int len = strlen(valid_word->word);
 
+    // init count of all letters in alphabet to 0
     int counts[26];
     for(int i=0; i<26; ++i)
         counts[i] = 0;
 
+    // when letter found inc the count
     for(int i=0; i<len; ++i)
         ++counts[int(valid_word->word[i]) - 97];               
 
+    // search through letter counts saving the highest count
     for(int i=0; i<26; ++i)
     {
         if(counts[i] > valid_word->count)
@@ -194,11 +204,25 @@ void find_dominant_letter_and_count(domword* valid_word)
     }
 }
 
+// prints the string, dominant letter in the string, and the 
+// count of the dominant letter
 void print_valid_word(domword* valid_word)
 {
     cout<<"Word: "<<valid_word->word;
     cout<<"\nDominant Letter: "<<valid_word->letter;
     cout<<"\nDL Count: "<<valid_word->count;
+}
+
+
+// Changes a string to be all lowercase
+void to_lowercase(char* word)
+{
+    if(!word) return;
+
+    int len = strlen(word);
+
+    for(int i=0; i<len; ++i)
+        word[i] = tolower(word[i]);
 }
 
 
